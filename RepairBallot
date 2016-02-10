@@ -1,0 +1,181 @@
+/*
+ * File: RepairBallot.java
+ * --------------------------------
+ */
+
+import stanford.karel.*;
+
+public class RepairBallot extends Karel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/*
+ * pre-condition:starts in a ballot
+ * post-condition:ends with all of the ballots clean
+ */
+	public void run(){
+		if(frontIsClear()){
+			checkBallot();
+			clearBallot();
+		}
+		if (frontIsBlocked()){
+			clearLastBallot();
+		}
+
+	}
+	
+	/*
+	 * pre-condition:starts in the ballot and goes to the bottom
+	 * post-condition:determines if the balot needs to be fixed
+	 */
+	private void checkBallot(){
+		bottomOfBallot();
+		while(beepersPresent()&& frontIsClear()){
+			move();
+		}
+		if (frontIsBlocked()){
+			returnToCenter();
+			run();
+		}
+	}
+	
+	/*
+	 * pre-condition: clears all of the missed holes
+	 * post-condition: goes to next ballot
+	 */
+	private void clearBallot(){
+		if (frontIsClear() && rightIsBlocked()){
+			move();
+			pickAllBeepers();
+			move();
+			pickAllBeepers();
+			returnToCenter();
+			if(frontIsClear()){
+				run();
+			}
+			//middle
+		}else if(frontIsClear() && rightIsClear()){
+			move(); 
+			pickAllBeepers();
+			turnAround();
+			move();
+			move();
+			pickAllBeepers();
+			returnToCenter();
+			if (frontIsClear()){
+				run();
+			}
+			//top
+		}else if(frontIsBlocked() && rightIsBlocked()){
+			turnAround();
+			move();
+			pickAllBeepers();
+			move();
+			pickAllBeepers();
+			returnToCenter();
+			if (frontIsClear()){
+				run();
+			}
+		}
+	}
+	
+	/*
+	 * pre-condition: on the last ballot
+	 * post-condition: ends after checking and/or clearing ballot.
+	 */
+	private void clearLastBallot(){
+		bottomOfBallot();
+		while(beepersPresent()&& frontIsClear()){
+			move();
+		}
+		if (frontIsBlocked() && rightIsBlocked() && beepersPresent()){
+			returnToCenter();
+		}else if (frontIsClear() && leftIsBlocked() && noBeepersPresent()){
+			move();
+			pickAllBeepers();
+			move();
+			pickAllBeepers();
+			returnToCenter();
+			
+			//middle
+		}else if(frontIsClear() && leftIsClear()&& noBeepersPresent()){
+			move(); 
+			pickAllBeepers();
+			turnAround();
+			move();
+			move();
+			pickAllBeepers();
+			returnToCenter();
+			
+			//top
+		}else if(frontIsBlocked() && leftIsBlocked()&& noBeepersPresent()){
+			turnAround();
+			move();
+			pickAllBeepers();
+			move();
+			pickAllBeepers();
+			returnToCenter();
+			
+		}
+	}
+	
+	/*
+	 * pre-condition:have beepers underneath karel
+	 * post-condition: beepers have all been picked up by karel
+	 */
+	private void pickAllBeepers(){
+		while (beepersPresent()){
+			pickBeeper();
+		}
+	}
+	
+	/*
+	 * pre-condition:starts in the ballot
+	 * post-condition: ends in the bottom of the ballot.
+	 */
+	private void bottomOfBallot(){
+		while (notFacingSouth()){
+			turnLeft();
+		}
+		while(frontIsClear()){
+			move();
+		}
+		while(notFacingNorth()){
+			turnLeft();
+		}
+	}
+	
+	/*
+	 * pre-condition:facing a direction
+	 * post-condition: turns right of that direction
+	 */
+	private void turnRight(){
+		for (int i=0; i<3; i++){
+			turnLeft();
+		}
+	}
+	
+	/*
+	 * pre-condition: from anywhere in the ballot
+	 * post-condition: returns to center row, and to that next ballot.
+	 */
+	private void returnToCenter(){
+		bottomOfBallot();
+		move();
+		turnRight();
+		if(frontIsClear()){
+			move();
+		}
+	}
+	
+	/*
+	 * pre-condition:facing some direction
+	 * post-condition: facing opposite direction.
+	 */
+	private void turnAround(){
+		for (int i=0; i<2; i++){
+			turnLeft();
+		}
+	}
+}
