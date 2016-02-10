@@ -1,0 +1,168 @@
+/*
+ * File: RebuildTrees.java
+ * --------------------------------
+ */
+
+import stanford.karel.*;
+
+public class RebuildTrees extends Karel{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+/*
+ * Pre-Condition: Starts at (1,1) facing east
+ * Post-Condition:Ends at the opposite wall after building the trees
+ */
+	public void run(){
+		// Write your code here
+		while (frontIsClear()){
+			findStump();
+			clearStump();
+			buildTree();
+		}
+	}
+	
+/*
+ * Pre-Condition: Karel is searching for a stump (beeper)
+ * Post-Condition: Karel has found a beeper and stops
+ */
+	private void findStump(){
+		while (notFacingEast()){
+			turnLeft();
+		}
+		while (frontIsClear()&& noBeepersPresent()){
+			move();
+		}
+	}
+	
+/*
+ * Pre-Condition: Karel is on a stump and searches for the end beepers
+ * Post-Condition: Karel ends in the center of the emptied stump
+ */
+	private void clearStump(){
+		while (beepersPresent()){	
+			while (frontIsClear()&& beepersPresent()){
+				move();
+			}
+			if (noBeepersPresent()){
+			turnAround();
+			move();
+			pickBeeper();
+			move();
+			}else {
+				pickBeeper();
+			}
+			if (noBeepersPresent()){
+				turnAround();
+				move();
+			}
+		}
+	}
+	
+/*
+ * Pre-Condition: Karel is in the center of the stump and begins to create the tree
+ * Post-Condition: Karel has created a tree and goes back to checking for the next tree
+ */
+	private void buildTree(){
+		if(frontIsClear()){
+			while(notFacingNorth()){
+				turnLeft();
+			}
+			for (int i=0; i<4; i++){
+				putBeeper();
+				move();
+			}
+			putBeeper();
+			leftBranch();
+			rightBranch();
+			backToFloor();
+		}
+	}
+	
+/*
+ * Pre-Condition: Karel is on the top of the tree and decides to create the left branch
+ * Post-Condition: Karel ends back into the position it started ontop of the tree
+ */
+	private void leftBranch(){
+		for(int i=0; i<2; i++){
+			turnLeft();
+			move();
+			turnLeft();
+			move();
+			putBeeper();
+			turnAround();
+		}
+		for(int i=0; i<2; i++){
+			move();
+		}
+		turnRight();
+		for(int i=0; i<2; i++){
+			move();
+		}
+		while(notFacingNorth()){
+			turnLeft();
+		}
+	}
+
+	/*
+	 * Pre-Condition: Karel is on the top of the tree and decides to create the right branch
+	 * Post-Condition: Karel ends back into the position it started on top of the tree
+	 */	
+	private void rightBranch(){
+		for(int i=0; i<2; i++){
+			turnRight();
+			move();
+			turnRight();
+			move();
+			putBeeper();
+			turnAround();
+		}
+		for(int i=0; i<2; i++){
+			move();
+		}
+		turnLeft();
+		for(int i=0; i<2; i++){
+			move();
+		}
+	}
+	
+/*
+ * Pre-Condition: Karel is on top of the tree after it is done and returns to the ground
+ * Post-Condition: Karel is on the floor and moves 	
+ */
+	private void backToFloor(){
+		while (notFacingSouth()){
+			turnLeft();
+		}
+		while (frontIsClear()){
+			move();
+		}
+		while (notFacingEast()){
+			turnLeft();
+		}
+		move();
+	}
+	
+/*
+ * Pre-Condition: Karel is facing direction
+ * Post-Condition: Karel is facing the other direction
+ */
+	private void turnAround(){
+		for (int i=0; i<2; i++){
+			turnLeft();
+		}
+	}
+	
+/*
+ * Pre-Condition: Karel is facinga direction 
+ * Post-Condition: Karel faces right from the direction 
+ */
+	private void turnRight(){
+		for (int i=0; i<3; i++){
+			turnLeft();
+		}
+	}
+}
