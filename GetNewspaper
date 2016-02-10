@@ -1,0 +1,113 @@
+/*
+ * File: GetNewspaper.java
+ * --------------------------------
+ */
+
+import stanford.karel.*;
+
+public class NewspaperKarel extends Karel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public void run(){
+		findDoor();
+		pickUpNewspapers();
+		returnToChair();
+		dropNewspapers();
+	}
+
+	/* Pre-Condition - faces any direction and is anywhere in the house 
+	 * Post-Condition - located in front of door, facing south
+	 */
+	private void findDoor() {
+		while (notFacingNorth()){
+			turnLeft();
+		}
+		while (frontIsClear()){
+			move();
+		}
+		turnRight();
+		while (frontIsClear()){
+			move();
+		}
+		turnRight();   
+		while (leftIsBlocked()){
+			move();
+		}
+	}
+
+	/* Pre-Condition - located in front of door, facing south
+	 * Post-Condition - he will have picked up all newspapers located outside door and 
+	 * 					will end one corner north of door, facing west
+	 */
+	private void pickUpNewspapers(){
+		nextCorner();
+		turnRight();
+		move();
+		checkPickBeeper();
+		nextCorner();
+		nextCorner();
+		move();
+		checkPickBeeper();
+		nextCorner();
+	}
+
+	/* Pre-Condition - will be one corner north of door, facing west
+	 * Post-Condition - will return to chair with newspapers and 
+	 *                  will end at the South-West corner facing east
+	 */
+	private void returnToChair(){
+		turnLeft();
+		move();
+		turnRight();
+		move();
+		turnLeft();
+		while (frontIsClear()){
+			move();
+		}
+		turnRight();
+		while (frontIsClear()){
+			move();
+		}
+		turnAround();
+	}
+
+	/*Pre-Condition -  will be at the South-West corner facing east
+	 * Post-Condition - will have deposited the newspapers on the chair
+	 */
+	private void dropNewspapers(){
+		while (beepersInBag()){
+			putBeeper();
+		}
+	}
+
+	//to check if beepers are present at corner and if present then pick up
+	private void checkPickBeeper(){
+		while (beepersPresent()){
+			pickBeeper();
+		}
+	}
+
+	//to move Karel to the next corner to find newspapers 
+	private void nextCorner() {
+		turnLeft();
+		move();
+		checkPickBeeper ();
+	}
+
+	// to turn Karel right by turning left three times 
+	private void turnRight(){
+		for (int i=0; i<3; i++){
+			turnLeft();	
+		}
+	}
+
+	// to turn Karel around by turning left twice
+	private void turnAround() {
+		for (int i=0; i<2; i++){
+			turnLeft();
+		}
+	}	
+}
