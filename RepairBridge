@@ -1,0 +1,119 @@
+/*
+ * File: RepairBridge.java                                     
+ * --------------------------------
+ */
+
+import stanford.karel.*;
+
+public class RepairBridge extends Karel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public void run(){
+		findSupport();
+		while (frontIsClear()){
+			nextSupport();
+		}
+
+	}
+
+	/* 
+	 * Pre-Condition - Karel will be at South-West corner facing east
+	 * Post-Condition - Karel will have filled all columns in the 
+	 * 					first section of supports
+	 */
+	private void findSupport(){
+		while (noBeepersPresent()){
+			move();
+		}
+		turnLeft();
+		while(frontIsClear()){
+			move();
+		}
+		turnLeft();
+		while(frontIsClear()){
+			move();
+		}
+		turnAround();
+		while(leftIsClear()){
+			move();
+		}
+		fillAllColumns();
+	}
+
+	/*
+	 * Pre-Condition - Karel is facing east under a support
+	 * Post-Condition - Karel will have filled all columns with beepers 
+	 * 					and will end up where he began
+	 */
+	private void fillAllColumns(){
+		while(leftIsBlocked()){
+			fillOneColumn();
+			backToTop();
+			turnRight();
+			if (frontIsClear()){
+				move();
+			}else{
+				break;
+			}
+		}
+	}
+
+	/*
+	 * Pre-Condition - Karel will be facing east under a support
+	 * Post-Condition - he will have filled one column with beepers 
+	 * 					and will be facing south at the bottom of support
+	 */
+	private void fillOneColumn(){
+		turnRight();
+		while (frontIsClear()){
+
+			if (noBeepersPresent()){
+				putBeeper();
+			}
+			move();
+		}
+		if (noBeepersPresent()){
+			putBeeper();
+		}
+	}
+
+	/*
+	 * Pre-Condition - he will be facing south at the bottom of a support
+	 * Post-Condiditon - he will be right underneath the support facing north
+	 */
+	private void backToTop(){
+		turnAround();
+		while (frontIsClear()){
+			move();
+		}
+	}
+
+	/*
+	 * Pre-Condition - Karel will be facing east on column after a support
+	 * Post-Condition - Karel will be filled all columns with beepers 
+	 * 					and will end up 
+	 */
+	private void nextSupport(){
+		while (leftIsClear()&& frontIsClear()){
+			move();
+		}
+		fillAllColumns();
+	}
+
+	// to make Karel turn right by turning left three turns
+	private void turnRight(){
+		for (int i=0; i<3; i++){
+			turnLeft();
+		}
+	}
+
+	// to make karel turn back by turning left twice 
+	private void turnAround(){
+		for (int i=0; i<2; i++){
+			turnLeft();
+		}
+	}
+}
