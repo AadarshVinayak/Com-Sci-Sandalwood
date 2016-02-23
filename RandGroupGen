@@ -1,0 +1,74 @@
+import acm.program.*;
+import acm.util.*;
+
+public class class_generator extends ConsoleProgram{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public static void main(String[] args){
+		new class_generator().start(args);
+	}
+	public void run(){
+		while(true){
+			setSize(1000,800);
+			setFont("arial-bold-24");
+		
+			boolean[] randClass= new boolean[20];
+			//assigning a an array to check for duplicate numbers
+			for (int i = 0; i<19; i++){
+				randClass[i]= false;
+			}
+			int groupSize = readInt("Enter your group size: "), groupNum = 1;
+			println("");
+			println("Group " + groupNum);
+			
+			int count = 0;
+			// determining a number, seeing if it was already chosen, and determining a name for the number.
+			while(true){
+				int number = rgen.nextInt(1,18);
+				if (!randClass[number]){
+					println(names.name(number));
+					randClass[number]= true;
+					if (number == 1){
+						count+=2; }else{
+							count++;
+						}
+					if((count%groupSize)==0){
+						groupNum++;
+						println("");
+						println("Group " + groupNum);
+						
+					}
+				}
+			}
+		}
+	}
+	//gets the random number and returns a name. 
+	public static String names(int num){
+		switch (num){
+		case 1: return(" Aadarsh"); 
+		case 2: return (" Charmi");
+		case 3: return (" Anita");
+		case 4: return (" Joshua.N");
+		case 5: return (" Damanveer");
+		case 6: return (" Aditi");
+		case 7: return (" Harsh");
+		case 8: return (" Aravinth");
+		case 9: return (" Kevin");
+		case 10: return (" Akashdeep");
+		case 11: return (" Raj");
+		case 12: return (" Prajwal");
+		case 13: return (" Gabriel");
+		case 14: return (" Syed");
+		case 15: return (" Joshua.O");
+		case 16: return (" Gurkirat");
+		case 17: return (" Param");
+		case 18: return (" Ishani");
+		case 19: return (" Siddarth");
+		default: return(" Unknown value");
+		}
+	}
+	private RandomGenerator rgen = RandomGenerator.getInstance();
+}
